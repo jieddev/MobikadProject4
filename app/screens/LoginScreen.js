@@ -1,31 +1,67 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
-import React, { useState} from 'react'
-import Icon from 'react-native-vector-icons/Ionicons';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
+import React, { useState } from "react";
+import Icon from "react-native-vector-icons/Ionicons";
 
-import colors from '../constants/colors'
-import Spacer from '../components/spacer'
+import colors from "../constants/colors";
+import Spacer from "../components/spacer";
 
 const LoginScreen = ({ navigation }) => {
-  const [phone, setPhone] = useState('');
+  const [phone, setPhone] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSendOTP = async () => {
-    console.log("Send OTP to ", phone);
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    if (!phone || phone.length < 10) {
+      Alert.alert("Error", "Please enter a valid phone number");
+      return;
+    }
+    setLoading(true);
+    const fullPhoneNumber = `+63${phone}`;
+
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        phone: fullPhoneNumber,
+        options: {
+          channel: "sms",
+        },
+      });
+      console.log("Error", error);
+      if (error) {
+        Alert.alert("Error", error.message);
+        setLoading(false);
+        return;
+      }
+
+      Alert.alert("Success", "OTP sent successfully");
+      navigation.navigate("OTP", {
+        phone: fullPhoneNumber,
+      });
+    } catch (error) {
+      console.log("Error", error);
+      setLoading(false);
+    }
   };
 
   return (
     <View style={styles.container}>
-
-      <TouchableOpacity 
+      <TouchableOpacity
         style={styles.backButton}
         onPress={() => navigation.goBack()}
       >
         <Icon name="arrow-back" size={24} color="black" />
       </TouchableOpacity>
-      
+
       <Text style={styles.title}>Enter your Phone Number</Text>
 
-      <Text style={styles.textFormat}>Please enter your active phone number below to create your account</Text>
+      <Text style={styles.textFormat}>
+        Please enter your active phone number below to create your account
+      </Text>
 
       <Spacer height={20}></Spacer>
 
@@ -34,6 +70,7 @@ const LoginScreen = ({ navigation }) => {
         <TextInput
           style={styles.phoneInput}
           placeholder="9123456789"
+          placeholderTextColor={colors.textColor}
           keyboardType="phone-pad"
           value={phone}
           onChangeText={setPhone}
@@ -43,43 +80,44 @@ const LoginScreen = ({ navigation }) => {
 
       <Spacer height={50}></Spacer>
 
-      <TouchableOpacity style={styles.sendOTPButton} onPress={handleSendOTP}>
-        <Text style={styles.buttonText}>Send OTP</Text>
+      <TouchableOpacity style={styles.sendOTPButton} onPress={handleSendOTP} disabled={loading}>
+        <Text style={styles.buttonText}>
+          {loading ? "Sending... " : "Send OTP"}
+        </Text>
       </TouchableOpacity>
-
     </View>
-  )
-}
+  );
+};
 
-export default LoginScreen
+export default LoginScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     fontSize: 32,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 15,
   },
   textFormat: {
     color: colors.textColor,
-    fontWeight: 'bold',
-    justifyContent: 'flex-start',
-    alignSelf: 'flex-start',
+    fontWeight: "bold",
+    justifyContent: "flex-start",
+    alignSelf: "flex-start",
     marginBottom: 5,
   },
   phoneContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 10,
     paddingHorizontal: 10,
-    width: '100%',
+    width: "100%",
     marginBottom: 15,
   },
   countryCode: {
@@ -94,26 +132,26 @@ const styles = StyleSheet.create({
   buttonText: {
     color: colors.white,
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   backButton: {
-      backgroundColor: colors.white,
-      width: '20%',
-      padding: 15,
-      borderRadius: 10,
-      alignItems: 'center',
-      borderColor: colors.primary,
-      borderWidth: 1,
-      position: 'absolute',
-      top: 40,  
-      left: 20,
+    backgroundColor: colors.white,
+    width: "20%",
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+    borderColor: colors.primary,
+    borderWidth: 1,
+    position: "absolute",
+    top: 40,
+    left: 20,
   },
   sendOTPButton: {
-      backgroundColor: colors.primary,
-      width: '100%',
-      padding: 15,
-      borderRadius: 10,
-      alignItems: 'center',
-      marginBottom: 15,
+    backgroundColor: colors.primary,
+    width: "100%",
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+    marginBottom: 15,
   },
-})
+});
