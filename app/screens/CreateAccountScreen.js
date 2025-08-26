@@ -8,10 +8,15 @@ import Spacer from '../components/spacer'
 
 
 export default function CreateAccountScreen({ navigation }) {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const handleCreateAccount = () => {
+    console.log({name, email, phone, password, confirmPassword});
+  }
 
   return (
     <View style={styles.container}>
@@ -23,7 +28,7 @@ export default function CreateAccountScreen({ navigation }) {
         <Icon name="arrow-back" size={24} color="black" />
       </TouchableOpacity>
 
-      <Spacer height={60} />
+      <Spacer height={50} />
 
       <Text style={styles.title}>Create Account</Text>
       
@@ -50,12 +55,23 @@ export default function CreateAccountScreen({ navigation }) {
         keyboardType="email-address"
         autoCapitalize="none"
       />
+
+      <Text style={styles.textFormat}>Phone Number</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter your phone number"
+        placeholderTextColor={colors.textColor}
+        value={phone}
+        onChangeText={setPhone}
+        keyboardType="phone-pad"
+      />
       
       <Text style={styles.textFormat}>Password</Text>
       <TextInput
         style={styles.input}
         placeholder="Enter your Password"
-        placeholderTextColor={colors.textColor}
+        placeholderTextColor="black"
+        color={colors.black}
         value={password}
         onChangeText={setPassword}
         secureTextEntry
@@ -66,6 +82,7 @@ export default function CreateAccountScreen({ navigation }) {
         style={styles.input}
         placeholder="Enter your Confirm Password"
         placeholderTextColor={colors.textColor}
+        color={colors.black}
         value={confirmPassword}
         onChangeText={setConfirmPassword}
         secureTextEntry
@@ -73,12 +90,10 @@ export default function CreateAccountScreen({ navigation }) {
       
       <Spacer height={20} />
       
-      <Spacer height={50} />
       
-      <TouchableOpacity style={styles.createButton}>
+      <TouchableOpacity style={styles.createButton} onPress={handleCreateAccount}>
         <Text style={styles.buttonText}>Create Account</Text>
       </TouchableOpacity>
-
     </View>
   )
 }
