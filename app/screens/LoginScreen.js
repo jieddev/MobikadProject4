@@ -5,31 +5,28 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 
 import colors from "../constants/colors";
 import Spacer from "../components/spacer";
+import supabase from "../config/supabaseClient";
 
 const LoginScreen = ({ navigation }) => {
-  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSendOTP = async () => {
-    if (!phone || phone.length < 10) {
-      Alert.alert("Error", "Please enter a valid phone number");
+  const handleSendVerification = async () => {
+    if (!email || !email.includes("@")) {
+      Alert.alert("Error", "Please enter a valid email address");
       return;
     }
     setLoading(true);
-    const fullPhoneNumber = `+63${phone}`;
-
     try {
       const { error } = await supabase.auth.signInWithOtp({
-        phone: fullPhoneNumber,
-        options: {
-          channel: "sms",
-        },
+        email,
       });
       console.log("Error", error);
       if (error) {
@@ -39,8 +36,8 @@ const LoginScreen = ({ navigation }) => {
       }
 
       Alert.alert("Success", "OTP sent successfully");
-      navigation.navigate("OTP", {
-        phone: fullPhoneNumber,
+      navigation.navigate("OTPScreen", {
+        email,
       });
     } catch (error) {
       console.log("Error", error);
@@ -57,33 +54,38 @@ const LoginScreen = ({ navigation }) => {
         <Icon name="arrow-back" size={24} color="black" />
       </TouchableOpacity>
 
-      <Text style={styles.title}>Enter your Phone Number</Text>
+      <Text style={styles.title}>Enter your Email Address</Text>
 
       <Text style={styles.textFormat}>
-        Please enter your active phone number below to create your account
+        Please enter your email below to create your account
       </Text>
 
       <Spacer height={20}></Spacer>
 
-      <View style={styles.phoneContainer}>
-        <Text style={styles.countryCode}>+63</Text>
+      <View style={styles.inputContainer}>
         <TextInput
-          style={styles.phoneInput}
-          placeholder="9123456789"
+          style={styles.emailInput}
+          placeholder="your@email.com"
           placeholderTextColor={colors.textColor}
-          keyboardType="phone-pad"
-          value={phone}
-          onChangeText={setPhone}
-          maxLength={10}
+          keyboardType="email-address"
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
         />
       </View>
 
       <Spacer height={50}></Spacer>
 
-      <TouchableOpacity style={styles.sendOTPButton} onPress={handleSendOTP} disabled={loading}>
-        <Text style={styles.buttonText}>
-          {loading ? "Sending... " : "Send OTP"}
-        </Text>
+      <TouchableOpacity
+        style={styles.sendOTPButton}
+        onPress={handleSendVerification}
+        disabled={loading}
+      >
+        {loading ? (
+          <ActivityIndicator color={colors.white} />
+        ) : (
+          <Text style={styles.buttonText}>Verify Email</Text>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -110,21 +112,16 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     marginBottom: 5,
   },
-  phoneContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+  inputContainer: {
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 10,
     paddingHorizontal: 10,
     width: "100%",
     marginBottom: 15,
+    height: 50,    
   },
-  countryCode: {
-    fontSize: 18,
-    marginRight: 8,
-  },
-  phoneInput: {
+  emailInput: {
     flex: 1,
     fontSize: 18,
     paddingVertical: 10,

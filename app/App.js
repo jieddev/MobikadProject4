@@ -6,7 +6,7 @@ import { StyleSheet, Text, View, Button, TouchableOpacity, Image, ActivityIndica
 import WelcomeScreen from './screens/WelcomeScreen'
 import CreateAccountScreen from './screens/CreateAccountScreen'
 import LoginScreen from './screens/LoginScreen'
-
+import OTPScreen from './screens/OTPScreen'
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +18,7 @@ export default function App() {
         <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
         <Stack.Screen name="CreateAccountScreen" component={CreateAccountScreen} />
         <Stack.Screen name="LoginScreen" component={LoginScreen}/>
+        <Stack.Screen name="OTPScreen" component={OTPScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
