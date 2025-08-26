@@ -2,11 +2,16 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-nativ
 import React, { useState} from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import colors from '../config/colors'
+import colors from '../constants/colors'
 import Spacer from '../components/spacer'
 
 const LoginScreen = ({ navigation }) => {
   const [phone, setPhone] = useState('');
+
+  const handleSendOTP = async () => {
+    console.log("Send OTP to ", phone);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+  };
 
   return (
     <View style={styles.container}>
@@ -20,6 +25,10 @@ const LoginScreen = ({ navigation }) => {
       
       <Text style={styles.title}>Enter your Phone Number</Text>
 
+      <Text style={styles.textFormat}>Please enter your active phone number below to create your account</Text>
+
+      <Spacer height={20}></Spacer>
+
       <View style={styles.phoneContainer}>
         <Text style={styles.countryCode}>+63</Text>
         <TextInput
@@ -32,7 +41,9 @@ const LoginScreen = ({ navigation }) => {
         />
       </View>
 
-      <TouchableOpacity style={styles.sendOTPButton} onPress={() => {console.log('Send OTP pressed')}}>
+      <Spacer height={50}></Spacer>
+
+      <TouchableOpacity style={styles.sendOTPButton} onPress={handleSendOTP}>
         <Text style={styles.buttonText}>Send OTP</Text>
       </TouchableOpacity>
 
@@ -53,6 +64,13 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: 'bold',
     marginBottom: 15,
+  },
+  textFormat: {
+    color: colors.textColor,
+    fontWeight: 'bold',
+    justifyContent: 'flex-start',
+    alignSelf: 'flex-start',
+    marginBottom: 5,
   },
   phoneContainer: {
     flexDirection: 'row',

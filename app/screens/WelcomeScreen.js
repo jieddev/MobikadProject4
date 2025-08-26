@@ -1,7 +1,7 @@
 import { ImageBackground, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
 
-import colors from '../config/colors'
+import colors from '../constants/colors'
 import Spacer from '../components/spacer'
 
 export default function WelcomeScreen({ navigation}) {

@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-nativ
 import React, { useState } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import colors from '../config/colors'
+import colors from '../constants/colors'
 import Spacer from '../components/spacer'
 
 
@@ -12,11 +12,9 @@ export default function CreateAccountScreen({ navigation }) {
   const [lastname, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleSendOTP= () => {
-    console.log({name, email, phone, password, confirmPassword});
+    console.log({firstname, lastname, email, phone});
   }
 
   return (
@@ -80,7 +78,7 @@ export default function CreateAccountScreen({ navigation }) {
       <Spacer height={20} />
       
       
-      <TouchableOpacity style={styles.sendOTPButton} onPress={() => {console.log('Send OTP pressed')}}>
+      <TouchableOpacity style={styles.sendOTPButton} onPress={handleSendOTP}>
         <Text style={styles.buttonText}>Send OTP</Text>
       </TouchableOpacity>
       
