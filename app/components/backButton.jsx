@@ -4,7 +4,7 @@ import React from 'react'
 
 import colors from '../config/colors'
 
-const backButton = (navigation) => {
+const BackButton = (navigation) => {
   return (
     <TouchableOpacity 
         style={styles.backButton}
@@ -15,7 +15,7 @@ const backButton = (navigation) => {
   )
 }
 
-export default backButton
+export default BackButton
 
 const styles = StyleSheet.create({
     backButton: {

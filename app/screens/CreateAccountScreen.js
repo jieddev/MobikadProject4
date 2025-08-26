@@ -8,13 +8,14 @@ import Spacer from '../components/spacer'
 
 
 export default function CreateAccountScreen({ navigation }) {
-  const [name, setName] = useState('');
+  const [firstname, setFirstName] = useState('');
+  const [lastname, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleCreateAccount = () => {
+  const handleSendOTP= () => {
     console.log({name, email, phone, password, confirmPassword});
   }
 
@@ -27,6 +28,7 @@ export default function CreateAccountScreen({ navigation }) {
       >
         <Icon name="arrow-back" size={24} color="black" />
       </TouchableOpacity>
+      
 
       <Spacer height={50} />
 
@@ -36,13 +38,22 @@ export default function CreateAccountScreen({ navigation }) {
 
       <Spacer height={30} />
 
-      <Text style={styles.textFormat}>Full Name</Text>
+      <Text style={styles.textFormat}>First Name</Text>
       <TextInput
         style={styles.input}
-        placeholder="Enter your full name"
+        placeholder="Enter your first name"
         placeholderTextColor={colors.textColor}
-        value={name}
-        onChangeText={setName}
+        value={firstname}
+        onChangeText={setFirstName}
+      />
+
+      <Text style={styles.textFormat}>Last Name</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter your last name"
+        placeholderTextColor={colors.textColor}
+        value={lastname}
+        onChangeText={setLastName}
       />
 
       <Text style={styles.textFormat}>Email</Text>
@@ -66,34 +77,13 @@ export default function CreateAccountScreen({ navigation }) {
         keyboardType="phone-pad"
       />
       
-      <Text style={styles.textFormat}>Password</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your Password"
-        placeholderTextColor="black"
-        color={colors.black}
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      
-      <Text style={styles.textFormat}>Confirm Password</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your Confirm Password"
-        placeholderTextColor={colors.textColor}
-        color={colors.black}
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-        secureTextEntry
-      />
-      
       <Spacer height={20} />
       
       
-      <TouchableOpacity style={styles.createButton} onPress={handleCreateAccount}>
-        <Text style={styles.buttonText}>Create Account</Text>
+      <TouchableOpacity style={styles.sendOTPButton} onPress={() => {console.log('Send OTP pressed')}}>
+        <Text style={styles.buttonText}>Send OTP</Text>
       </TouchableOpacity>
+      
     </View>
   )
 }
@@ -125,7 +115,12 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     paddingHorizontal: 15,
   },
-  createButton: {
+  buttonText: {
+    color: colors.white,
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  sendOTPButton: {
     backgroundColor: colors.primary,
     width: '100%',
     padding: 15,
@@ -144,10 +139,5 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 40,  
     left: 20,
-  },
-  buttonText: {
-    color: colors.white,
-    fontSize: 18,
-    fontWeight: 'bold',
   },
 })
